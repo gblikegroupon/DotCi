@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */
+*/
 package com.groupon.jenkins.dynamic.build;
 
 import com.google.common.base.Objects;
@@ -75,6 +75,11 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
         this.model = new DynamicBuildModel(this);
     }
 
+    public void postMorphiaLoad() {
+        super.postMorphiaLoad();
+        this.model = new DynamicBuildModel(this);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void run() {
@@ -89,7 +94,7 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
 
     public DynamicBuildLayouter getLayouter() {
         return  dynamicBuildLayouter;
-    }
+   }
 
     // This needs to be overriden here to override @RequirePOST annotation,
     // which seems like a bug in the version were are using.
@@ -102,13 +107,6 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
     public void restoreFromDb(AbstractProject project, Map<String, Object> input) {
         super.restoreFromDb(project, input);
         this.model = new DynamicBuildModel(this);
-    }
-
-    @Override
-    protected Map<String, Object> getBuildAttributesForDb() {
-        Map<String, Object> buildAttributes = super.getBuildAttributesForDb();
-        buildAttributes.put("main_build", true);
-        return buildAttributes;
     }
 
     @Override
@@ -224,7 +222,6 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
             }
 
         }
-
     }
 
     @Override
@@ -237,11 +234,9 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
         return this.getParent();
     }
 
-
     public Iterable<DynamicSubProject> getSubProjects(Iterable<Combination> mainRunCombinations) {
         return getConductor().getSubProjects(mainRunCombinations);
     }
-
 
     public Build getRun(Combination combination) {
         for (DynamicSubProject subProject : getAllSubProjects()) {
@@ -262,7 +257,6 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
         DynamicSubBuild r = c.getBuildByNumber(getNumber());
         return r != null ? r : null;
     }
-
 
     @Override
     public boolean equals(Object other) {
@@ -285,7 +279,6 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
         return this.getCause() == null ? "" : getCause().getSha();
     }
 
-
     @Override
     public BuildCause getCause() {
         return model.getBuildCause();
@@ -303,6 +296,7 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
      * Jenkins method is final cannot be mocked. Work around to make this
      * mockable without powermock
      */
+
     public String getFullUrl() {
         return this.getAbsoluteUrl();
     }

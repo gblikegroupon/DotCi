@@ -20,21 +20,23 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-*/
-package com.groupon.jenkins.dynamic.build;
+ */
+package com.groupon.jenkins.mongo;
 
-import hudson.model.Result;
+import com.mongodb.DBObject;
+import hudson.matrix.Combination;
+import org.mongodb.morphia.converters.TypeConverter;
+import org.mongodb.morphia.mapping.MappedField;
 
-import org.junit.Test;
+import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+public class CombinationConverter extends TypeConverter {
+    public CombinationConverter() {
+        super(Combination.class);
+    }
 
-public class CurrentBuildStateTest {
-
-	@Test
-	public void should_be_building_before_post_production_state() {
-		CurrentBuildState currentBuildState = new CurrentBuildState("NOT_STARTED", Result.NOT_BUILT);
-		assertTrue(currentBuildState.isBuilding());
-	}
-
+    @Override
+    public Object decode(Class targetClass, Object fromDBObject, MappedField optionalExtraInfo) {
+        return new Combination((Map<String, String>) fromDBObject);
+    }
 }
