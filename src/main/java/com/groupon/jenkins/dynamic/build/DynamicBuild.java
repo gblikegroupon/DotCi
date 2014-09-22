@@ -63,7 +63,7 @@ import javax.servlet.ServletException;
 public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
 
     private transient DynamicBuildModel model;
-    private DynamicBuildLayouter dynamicBuildLayouter;
+    private AxisList axisList;
 
     public DynamicBuild(DynamicProject project) throws IOException {
         super(project);
@@ -93,7 +93,7 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
     }
 
     public DynamicBuildLayouter getLayouter() {
-        return  dynamicBuildLayouter;
+        return new DynamicBuildLayouter(axisList, this);
    }
 
     // This needs to be overriden here to override @RequirePOST annotation,
@@ -148,15 +148,6 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
         return vars;
     }
 
-    public void setDynamicBuildLayouter(DynamicBuildLayouter dyanamicBuildLayouter) {
-        this.dynamicBuildLayouter = dyanamicBuildLayouter;
-        try {
-            save();
-        } catch (IOException e) {
-            throw  new RuntimeException(e);
-        }
-    }
-
     public Iterable<DynamicSubProject> getAllSubProjects() {
         return getConductor().getItems();
     }
@@ -170,9 +161,12 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
     }
 
     public void setAxisList(AxisList axisList) {
-        DynamicBuildLayouter dynamicBuildLayouter = new DynamicBuildLayouter(axisList, this);
-        setDynamicBuildLayouter(dynamicBuildLayouter);
-
+        this.axisList = axisList;
+        try {
+            save();
+        } catch (IOException e) {
+            throw  new RuntimeException(e);
+        }
     }
 
     protected class DynamicRunExecution extends Build.BuildExecution implements BuildExecutionContext {

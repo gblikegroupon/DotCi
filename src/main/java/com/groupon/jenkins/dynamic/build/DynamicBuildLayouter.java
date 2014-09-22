@@ -28,10 +28,8 @@ import hudson.matrix.Combination;
 import hudson.matrix.Layouter;
 
 public class DynamicBuildLayouter extends Layouter<DynamicRunPtr> {
-
-
     private  AxisList axisList;
-    private   DynamicBuild dynamicBuild;
+    private  DynamicBuild dynamicBuild;
 
     public DynamicBuildLayouter(AxisList axisList, DynamicBuild dynamicBuild) {
 		super(axisList);
