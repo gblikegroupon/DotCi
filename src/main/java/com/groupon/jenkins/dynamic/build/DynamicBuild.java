@@ -48,7 +48,9 @@ import hudson.util.VersionNumber;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import jenkins.model.Jenkins;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -57,12 +59,15 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.interceptor.RequirePOST;
+import org.mongodb.morphia.annotations.Property;
 
 import javax.servlet.ServletException;
 
 public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
 
     private transient DynamicBuildModel model;
+
+    @Property(concreteClass = AxisList.class)
     private AxisList axisList;
 
     public DynamicBuild(DynamicProject project) throws IOException {
@@ -93,6 +98,7 @@ public class DynamicBuild extends DbBackedBuild<DynamicProject, DynamicBuild> {
     }
 
     public DynamicBuildLayouter getLayouter() {
+
         return new DynamicBuildLayouter(axisList, this);
    }
 

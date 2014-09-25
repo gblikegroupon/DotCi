@@ -76,6 +76,7 @@ public class MongoRepositoryTest {
         mapper.getConverters().addConverter(new DescribableListConverter());
         mapper.getConverters().addConverter(new ParametersDefinitionPropertyCoverter());
         mapper.getConverters().addConverter(new CombinationConverter());
+        mapper.getConverters().addConverter(new AxisListConverter());
         mapper.getOptions().setActLikeSerializer(true);
         mapper.getOptions().objectFactory = new CustomMorphiaObjectFactory(MongoRepository.class.getClassLoader());
 
