@@ -38,6 +38,7 @@ import org.acegisecurity.context.SecurityContextHolder;
 import org.jenkinsci.plugins.GithubAuthenticationToken;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -113,6 +114,7 @@ public class MongoRepositoryTest {
 
     @Test
     @LocalData
+    @Ignore
     public void should_save_a_build() throws Exception {
 
         GHRepository ghRepository = setupMockGHRepository();
