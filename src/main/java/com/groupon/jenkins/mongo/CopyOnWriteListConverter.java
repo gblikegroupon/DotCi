@@ -27,6 +27,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
 import hudson.util.CopyOnWriteList;
 import org.mongodb.morphia.converters.DefaultConverters;
+import org.mongodb.morphia.converters.SimpleValueConverter;
 import org.mongodb.morphia.converters.TypeConverter;
 import org.mongodb.morphia.mapping.MappedField;
 import org.mongodb.morphia.mapping.Mapper;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CopyOnWriteListConverter extends TypeConverter {
+public class CopyOnWriteListConverter extends TypeConverter implements SimpleValueConverter {
 
     public CopyOnWriteListConverter() {
         super(CopyOnWriteList.class);

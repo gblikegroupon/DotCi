@@ -25,12 +25,13 @@ package com.groupon.jenkins.mongo;
 
 import com.mongodb.DBObject;
 import hudson.matrix.Combination;
+import org.mongodb.morphia.converters.SimpleValueConverter;
 import org.mongodb.morphia.converters.TypeConverter;
 import org.mongodb.morphia.mapping.MappedField;
 
 import java.util.Map;
 
-public class CombinationConverter extends TypeConverter {
+public class CombinationConverter extends TypeConverter implements SimpleValueConverter {
     public CombinationConverter() {
         super(Combination.class);
     }

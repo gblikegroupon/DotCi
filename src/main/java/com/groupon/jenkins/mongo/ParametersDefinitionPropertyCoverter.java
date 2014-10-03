@@ -27,13 +27,14 @@ import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
 import hudson.model.ParameterDefinition;
 import hudson.model.ParametersDefinitionProperty;
+import org.mongodb.morphia.converters.SimpleValueConverter;
 import org.mongodb.morphia.converters.TypeConverter;
 import org.mongodb.morphia.mapping.MappedField;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParametersDefinitionPropertyCoverter extends TypeConverter {
+public class ParametersDefinitionPropertyCoverter extends TypeConverter implements SimpleValueConverter {
     public ParametersDefinitionPropertyCoverter() {
         super(ParametersDefinitionProperty.class);
     }
