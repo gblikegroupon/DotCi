@@ -58,6 +58,7 @@ public abstract class MongoRepository {
         mapper.getConverters().addConverter(new ParametersDefinitionPropertyCoverter());
         mapper.getConverters().addConverter(new CombinationConverter());
         mapper.getConverters().addConverter(new AxisListConverter());
+        mapper.getConverters().addConverter(new ResultConverter());
 
 
         mapper.getOptions().setActLikeSerializer(true);

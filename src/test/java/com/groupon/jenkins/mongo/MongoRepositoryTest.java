@@ -78,6 +78,7 @@ public class MongoRepositoryTest {
         mapper.getConverters().addConverter(new ParametersDefinitionPropertyCoverter());
         mapper.getConverters().addConverter(new CombinationConverter());
         mapper.getConverters().addConverter(new AxisListConverter());
+        mapper.getConverters().addConverter(new ResultConverter());
         mapper.getOptions().setActLikeSerializer(true);
         mapper.getOptions().objectFactory = new CustomMorphiaObjectFactory(MongoRepository.class.getClassLoader());
 
@@ -149,7 +150,9 @@ public class MongoRepositoryTest {
         PowerMockito.when(ghRepository.getUrl()).thenReturn("git@github.com:groupon/DotCi.git");
 
         GHHook hook = new GHHook();
-        PowerMockito.when(ghRepository.createHook("web", new HashMap<String,String>(){{ put("url", "http://localhost/githook/"); }}, Arrays.asList(GHEvent.PUSH, GHEvent.PULL_REQUEST), true)).thenReturn(hook);
+        PowerMockito.when(ghRepository.createHook("web", new HashMap<String, String>() {{
+            put("url", "http://localhost/githook/");
+        }}, Arrays.asList(GHEvent.PUSH, GHEvent.PULL_REQUEST), true)).thenReturn(hook);
         PowerMockito.when(ghRepository.isPrivate()).thenReturn(true);
         PowerMockito.when(ghRepository.getDeployKeys()).thenReturn(new ArrayList<GHDeployKey>());
         PowerMockito.when(ghRepository.addDeployKey("DotCi", null)).thenReturn(null);

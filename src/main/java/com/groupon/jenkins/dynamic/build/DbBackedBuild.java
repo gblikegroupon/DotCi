@@ -64,6 +64,10 @@ public abstract class DbBackedBuild<P extends DbBackedProject<P, B>, B extends D
 
     private ObjectId projectId; //TODO replace with Reference
 
+    public ObjectId getProjectId() {
+        return projectId;
+    }
+
     @PrePersist
     void saveState(final DBObject dbObj) {
         dbObj.put("state", getState().toString());
