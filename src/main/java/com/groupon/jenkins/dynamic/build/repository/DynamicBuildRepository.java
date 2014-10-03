@@ -208,11 +208,16 @@ public class DynamicBuildRepository extends MongoRepository {
 	}
 
 	public <T extends DbBackedBuild> Iterable<T> getCurrentUserBuilds(DbBackedProject project, int i) {
-        List<DbBackedBuild> builds = getQuery(project).
-                limit(i).
-                order("-number").
-                field("actions.causes.user").equal(GithubCurrentUserService.current().getCurrentLogin()).
-                asList();
+        Query<DbBackedBuild> query = getQuery(project)
+            .limit(i)
+            .order("-number");
+
+        query.or(
+            query.criteria("actions.causes.user").equal(GithubCurrentUserService.current().getCurrentLogin()),
+            query.criteria("actions.causes.pusher").equal(GithubCurrentUserService.current().getCurrentLogin())
+        );
+
+        List<DbBackedBuild> builds = query.asList();
 
         for(DbBackedBuild build : builds) {
             associateProject(project, build);
@@ -255,15 +260,20 @@ public class DynamicBuildRepository extends MongoRepository {
 
 	public Iterable<DynamicBuild> getLastBuildsForUser(String pusher, int numberOfBuilds) {
 
-        List<DynamicBuild> builds = getDatastore().createQuery(DynamicBuild.class)
-                .limit(numberOfBuilds)
-                .disableValidation()
-                .order("timestamp")
-                .field("className").equal("com.groupon.jenkins.dynamic.build.DynamicBuild")
-                .field("actions.causes.user").equal(pusher)
-                .asList();
+        Query<DynamicBuild> query = getDatastore().createQuery(DynamicBuild.class)
+            .limit(numberOfBuilds)
+            .disableValidation()
+            .order("timestamp")
+            .field("className").equal("com.groupon.jenkins.dynamic.build.DynamicBuild");
 
-        DynamicProjectRepository repo = new DynamicProjectRepository();
+        query.or(
+                query.criteria("actions.causes.user").equal(GithubCurrentUserService.current().getCurrentLogin()),
+                query.criteria("actions.causes.pusher").equal(GithubCurrentUserService.current().getCurrentLogin())
+        );
+
+        List<DynamicBuild> builds = query.asList();
+
+                DynamicProjectRepository repo = new DynamicProjectRepository();
         for(DbBackedBuild build : builds) {
             DbBackedProject project = repo.getProjectById(build.getProjectId());
             associateProject(project, build);
