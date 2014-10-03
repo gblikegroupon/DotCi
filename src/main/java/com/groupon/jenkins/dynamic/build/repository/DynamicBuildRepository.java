@@ -79,7 +79,7 @@ public class DynamicBuildRepository extends MongoRepository {
 	}
 
 	public <T extends DbBackedBuild> T getLastBuild(DbBackedProject project) {
-        DbBackedBuild build =  getQuery(project).limit(1).order("number").get();
+        DbBackedBuild build =  getQuery(project).limit(1).order("-number").get();
 
         associateProject(project, build);
 
@@ -87,7 +87,7 @@ public class DynamicBuildRepository extends MongoRepository {
 	}
 
 	public <T extends DbBackedBuild> T getLastFailedBuild(DbBackedProject project) {
-        DbBackedBuild build =  getQuery(project).limit(1).order("number").
+        DbBackedBuild build =  getQuery(project).limit(1).order("-number").
                 field("result").equal(Result.FAILURE.toString()).
                 get();
 
@@ -97,7 +97,7 @@ public class DynamicBuildRepository extends MongoRepository {
     }
 
 	public <T extends DbBackedBuild> T getLastSuccessfulBuild(DbBackedProject project) {
-        DbBackedBuild build =  getQuery(project).order("number").
+        DbBackedBuild build =  getQuery(project).order("-number").
                 field("result").equal(Result.SUCCESS.toString()).
                 get();
 
@@ -107,7 +107,7 @@ public class DynamicBuildRepository extends MongoRepository {
     }
 
 	public <T extends DbBackedBuild> T getLastSuccessfulBuild(DbBackedProject project, String branch) {
-        DbBackedBuild build =  getQuery(project).order("number").
+        DbBackedBuild build =  getQuery(project).order("-number").
                 field("result").equal(Result.SUCCESS.toString()).
                 field("actions.causes.branch.branch").equal(branch).
                 get();
@@ -263,7 +263,7 @@ public class DynamicBuildRepository extends MongoRepository {
         Query<DynamicBuild> query = getDatastore().createQuery(DynamicBuild.class)
             .limit(numberOfBuilds)
             .disableValidation()
-            .order("timestamp")
+            .order("-timestamp")
             .field("className").equal("com.groupon.jenkins.dynamic.build.DynamicBuild");
 
         query.or(
