@@ -142,7 +142,7 @@ public class DynamicBuildRepository extends MongoRepository {
 
 	public <T extends DbBackedBuild> T getBuildBySha(DbBackedProject<?, ?> project, String sha) {
         DbBackedBuild build =  getQuery(project).
-            field("sha").equal(sha).
+            field("actions.causes.sha").equal(sha).
             get();
 
         associateProject(project, build);
